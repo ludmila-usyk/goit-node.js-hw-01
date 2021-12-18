@@ -1,5 +1,5 @@
-const chalk = require('chalk');
-const { Command } = require('commander');
+const chalk = require('chalk')
+const { Command } = require('commander')
 const {
   listContacts,
   addContact,
