@@ -44,10 +44,16 @@ const invokeAction = async ({ action, id, name, email, phone }) => {
       break
 
     case 'remove':
-        removeContact(id).then(contacts => {
-            console.log(chalk.green('Contact was deleted'));
-            console.table(contacts);
-          });
+        // removeContact(id).then(contacts => {
+        //     console.log(chalk.green('Contact was deleted'));
+        //     console.table(contacts);
+        //   });
+        const isDelletedContact = await removeContact(id);
+        if (isDelletedContact) {
+          console.log(chalk.green('Contact was deleted'));
+          return;
+        }
+        console.log(chalk.yellow('No contact('))
       break
 
     default:

@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const crypto = require('crypto')
+const randomuuid = require('randomuuid')
+const contactsPath = path.join(__dirname, './db/contacts.json')
 
 const readContent = async () => {
   const content = await fs.readFileSync(
@@ -17,7 +19,7 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const contacts = await readContent()
-  const [contact] = contacts.filter((contact) => contact.id === contactId)
+  const [contact] = contacts.find((contact) => contact.id === contactId)
   return contact
 }
 
