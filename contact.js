@@ -19,7 +19,7 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const contacts = await readContent()
-  const [contact] = contacts.find((contact) => contact.id === contactId)
+  const contact = contacts.find((contact) => contact.id === contactId)
   return contact
 }
 
@@ -33,6 +33,7 @@ async function removeContact(contactId) {
 }
 
 const addContact = async (name, email, phone) => {
+try {
   const contacts = await readContent()
   const newContact = { name, email, phone, id: crypto.randomUUID() }
   contacts.push(newContact)
@@ -41,6 +42,9 @@ const addContact = async (name, email, phone) => {
     JSON.stringify(contacts, null, 2),
   )
   return newContact
-}
+} catch (error) {
+  console.log(error.message);
+}}
+
 
 module.exports = { listContacts, getContactById, removeContact, addContact }

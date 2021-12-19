@@ -40,21 +40,17 @@ const invokeAction = async ({ action, id, name, email, phone }) => {
     case 'add':
       const contact = await addContact(name, email, phone)
       console.log(chalk.green('Add new contact'))
-      console.log(contact)
+      console.table(contact)
       break
 
     case 'remove':
-        // removeContact(id).then(contacts => {
-        //     console.log(chalk.green('Contact was deleted'));
-        //     console.table(contacts);
-        //   });
-        const isDelletedContact = await removeContact(id);
-        if (isDelletedContact) {
-          console.log(chalk.green('Contact was deleted'));
-          return;
-        }
-        console.log(chalk.yellow('No contact('))
-      break
+      const removedContact = await removeContact(id);
+      if (!removedContact) {
+        console.log("no such contact to delete");
+        return;
+      }
+      console.table(removedContact);
+      break;
 
     default:
       console.warn(chalk.red('Unknown action type!'))
