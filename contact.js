@@ -23,28 +23,27 @@ const getContactById = async (contactId) => {
   return contact
 }
 
-async function removeContact(contactId) {
+const removeContact = async (contactId) => {
   const contacts = await readContent();
-  const updatedContacts = contacts.filter(({ id }) => {
-    return id.toString() !== contactId;
-  });
-  fs.writeFileSync(contactsPath, JSON.stringify(updatedContacts));
-  return updatedContacts;
+  const updatedContacts = contacts.filter(contact => contact.id !== contactId);
+  await fs.writeFileSync(
+    path.join(__dirname, 'db', 'contacts.json'),
+    JSON.stringify(updatedContacts, null, 2),
+  )
+  return contacts.length !== updatedContacts.length
 }
 
 const addContact = async (name, email, phone) => {
-try {
-  const contacts = await readContent()
-  const newContact = { name, email, phone, id: crypto.randomUUID() }
-  contacts.push(newContact)
-  await fs.writeFileSync(
-    path.join(__dirname, 'db', 'contacts.json'),
-    JSON.stringify(contacts, null, 2),
-  )
-  return newContact
-} catch (error) {
-  console.log(error.message);
-}}
+  try {
+    const contacts = await listContacts();
+    const newContact = { id: crypto.randomUUID(), name, email, phone };
+    contacts.push(newContact);
+    await fs.writeFileSync(contactsPath, JSON.stringify(contacts, null, 2));
+    return newContact;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 
 module.exports = { listContacts, getContactById, removeContact, addContact }
