@@ -6,7 +6,7 @@ const contactsPath = path.join(__dirname, './db/contacts.json')
 
 const readContent = async () => {
   const content = await fs.readFileSync(
-    path.join(__dirname, 'db', 'contacts.json'),
+    contactsPath,
     'utf8',
   )
   const result = JSON.parse(content)
@@ -26,14 +26,18 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   const contacts = await readContent();
   const updatedContacts = contacts.filter(contact => contact.id !== contactId);
-  await fs.writeFileSync(
-    path.join(__dirname, 'db', 'contacts.json'),
+  await fs.writeFileSync (
+    contactsPath,
     JSON.stringify(updatedContacts, null, 2),
   )
   return contacts.length !== updatedContacts.length
 }
 
 const addContact = async (name, email, phone) => {
+    if (!name || !email || !phone) {
+    console.log("Name, email and phone are required.");
+    return;
+  }
   try {
     const contacts = await listContacts();
     const newContact = { id: crypto.randomUUID(), name, email, phone };
@@ -44,6 +48,5 @@ const addContact = async (name, email, phone) => {
     throw new Error(error);
   }
 };
-
 
 module.exports = { listContacts, getContactById, removeContact, addContact }
